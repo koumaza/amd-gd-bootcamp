@@ -54,16 +54,19 @@ jobs:
           echo Exception 1>&2
           exit 1
         fi
+        
         : Download Driver
         export PROJROOT=$PWD
         url=$(cat DriverPATH.url)
         mkdir -p Driver/ Driver/Extracted Driver/Downloaded
-        aria2c -x16 -s30 -m0 -c true -d Driver/Downloaded $url
+        aria2c -x16 -s30 -m0 -ctrue -d Driver/Downloaded $url
         driverpkg=$(ls Driver/Downloaded)
-        : Extract Driver
+        
+        : Extract Driver        
         driverdir=Driver/Extracted
         7z x -o$driverdir Driver/Downloaded/$driverpkg
-        : Modify Downloaded Driver
+        
+        : Modify Downloaded Driver        
         c_inf=$(ls $driverdir/Packages/Drivers/Display/WT6A_INF/C*.inf)
         u_inf=$(ls $driverdir/Packages/Drivers/Display/WT6A_INF/U*.inf)
         jq '.BuildInfo |= .+ {EnableFalcon : "true"}' < $driverdir/Config/InstallManifest.json > $driverdir/Config/InstallManifest.json.tmp && mv $driverdir/Config/InstallManifest.json.tmp $driverdir/Config/InstallManifest.json
@@ -71,6 +74,7 @@ jobs:
         grep ExcludeID $u_inf |sed -E 's/ExcludeID/;ExcludeID/g' > $u_inf.tmp && mv $u_inf.tmp $u_inf
         sed -i -E "s/\[ati2mtag_SoftwareDeviceSettings\]/[ati2mtag_SoftwareDeviceSettings\]\nHKR,,DisableWorkstation,%REG_DWORD%,$radeon_edition/" $c_inf
         sed -i -E "s/\[ati2mtag_SoftwareDeviceSettings\]/[ati2mtag_SoftwareDeviceSettings\]\nHKR,,DisableWorkstation,%REG_DWORD%,$radeon_edition/" $u_inf
+        
         : Create Package
         cd $driverdir/
         export ZSTD_CLEVEL=15 && tar -acvf ../../RadeonSoftwareForBootcamp-$edition.tar.zst Bin64/ Config/ Packages/ Setup.exe
