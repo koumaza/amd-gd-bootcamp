@@ -58,7 +58,7 @@ jobs:
         export PROJROOT=$PWD
         url=$(cat DriverPATH.url)
         mkdir -p Driver/ Driver/Extracted Driver/Downloaded
-        aria2c -x16 -s30 -d Driver/Downloaded $url
+        aria2c -x16 -s30 -m -c true -d Driver/Downloaded $url
         driverpkg=$(ls Driver/Downloaded)
         : Extract Driver
         driverdir=Driver/Extracted
