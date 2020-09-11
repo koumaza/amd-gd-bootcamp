@@ -21,6 +21,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
+
   Build:
     needs: [Tag]
     container: archlinux
@@ -78,6 +79,21 @@ jobs:
         : Create Package
         cd $driverdir/
         export ZSTD_CLEVEL=15 && tar -acvf ../../RadeonSoftwareForBootcamp-$edition.tar.zst Bin64/ Config/ Packages/ Setup.exe
+
+    - name: Upload a Build Artifact (${{ matrix.edition }})
+      uses: actions/upload-artifact@2.1.0
+      with:
+        name: Builded
+        path: RadeonSoftwareForBootcamp-${{ matrix.edition }}.tar.zst
+        
+  release:
+    needs: [Build]
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v2.0.1
+      with:
+        name: Builded
     - name: Create a Release
       id: create_release
       uses: actions/create-release@main
@@ -89,12 +105,21 @@ jobs:
         body: ${{ github.ref }} release.
         draft: false
         prerelease: false
-    - name: Upload Release Asset Regular
+    - name: Upload Release Asset Red
       uses: actions/upload-release-asset@main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./RadeonSoftwareForBootcamp-${{ matrix.edition }}.tar.zst
-        asset_name: RadeonSoftwareForBootcamp-${{ matrix.edition }}.tar.zst
+        asset_path: ./RadeonSoftwareForBootcamp-Red.tar.zst
+        asset_name: RadeonSoftwareForBootcamp-Red.tar.zst
+        asset_content_type: application/zstd
+    - name: Upload Release Asset Blue
+      uses: actions/upload-release-asset@main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./RadeonSoftwareForBootcamp-Blue.tar.zst
+        asset_name: RadeonSoftwareForBootcamp-Blue.tar.zst
         asset_content_type: application/zstd
