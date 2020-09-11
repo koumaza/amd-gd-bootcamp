@@ -17,6 +17,7 @@ jobs:
         with:
           fetch-depth: '0'
       - name: Bump version and push tag
+        id: BumpTag
         uses: anothrNick/github-tag-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -81,7 +82,7 @@ jobs:
         export ZSTD_CLEVEL=15 && tar -acvf ../../RadeonSoftwareForBootcamp-$edition.tar.zst Bin64/ Config/ Packages/ Setup.exe
 
     - name: Upload a Build Artifact (${{ matrix.edition }})
-      uses: actions/upload-artifact@2.1.0
+      uses: actions/upload-artifact@main
       with:
         name: Builded
         path: RadeonSoftwareForBootcamp-${{ matrix.edition }}.tar.zst
@@ -90,8 +91,12 @@ jobs:
     needs: [Build]
     runs-on: ubuntu-20.04
     steps:
+    - name: CheckOut
+      uses: actions/checkout@main
+      with:
+        fetch-depth: '0'
     - name: Download a Build Artifact
-      uses: actions/download-artifact@v2.0.1
+      uses: actions/download-artifact@main
       with:
         name: Builded
     - name: Create a Release
@@ -100,9 +105,9 @@ jobs:
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        body: ${{ github.ref }} release.
+        tag_name: ${{ steps.BumpTag.outputs.new_tag }}
+        release_name: Release ${{ steps.BumpTag.outputs.new_tag }}
+        body: ${{ steps.BumpTag.outputs.new_tag }} release.
         draft: false
         prerelease: false
     - name: Upload Release Asset Red
