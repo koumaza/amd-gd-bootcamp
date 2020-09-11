@@ -12,6 +12,9 @@ jobs:
   build:
     container: archlinux
     runs-on: ubuntu-20.04
+    defaults:
+      run:
+        shell: fish {0}
     strategy:
       matrix:
         edition: [Red,Blue]
@@ -33,7 +36,6 @@ jobs:
     - name: Build
       env:
         edition: ${{ matrix.edition }}
-      shell: fish
       run: |
         : Detect Edition
 
