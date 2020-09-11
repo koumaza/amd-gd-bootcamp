@@ -1,0 +1,94 @@
+name: Artifact
+on:
+  push:
+    branches:
+      - '*'
+    tags:
+      - '**'
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    container: archlinux
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        edition: [Red,Blue]
+    steps:
+    - name: SetUp Environment
+      run: |
+        pacman -Syyuuv --noconfirm --needed --debug --color always \
+        base base-devel p7zip aria2 git fish jq \
+        1>.tmp.fish-out.log | tee .tmp.fish-error.log
+    - name: CheckOut
+      uses: actions/checkout@main
+      with:
+        fetch-depth: '0'
+    - name: Bump version and push tag
+      uses: anothrNick/github-tag-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        WITH_V: true
+    - name: Build
+      env:
+        edition: ${{ matrix.edition }}
+      shell: fish
+      run: |
+        : Detect Edition
+
+          if test $edition = Red
+            set -gx radeon_edition 1
+          else if test $edition = Blue
+            set -gx radeon_edition 1
+          else
+            echo Exception 1>&2
+            exit 1
+          end
+
+        : Download Driver
+
+          set -gx PROJROOT $PWD
+          set -x url (cat DriverPATH.url)
+          mkdir -p Driver/ Driver/Extracted Driver/Downloaded
+          aria2c -x16 -s30 -d Driver/Downloaded $url
+          set -x driverpkg (ls Driver/Downloaded)
+
+        : Extract Driver
+
+          set -x driverdir Driver/Extracted
+          7z x -o$driverdir Driver/Downloaded/$driverpkg
+
+        : Modify Downloaded Driver
+
+          set c_inf (ls $driverdir/Packages/Drivers/Display/WT6A_INF/C*.inf)
+          set u_inf (ls $driverdir/Packages/Drivers/Display/WT6A_INF/U*.inf)
+          jq '.BuildInfo |= .+ {EnableFalcon : "true"}' < $driverdir/Config/InstallManifest.json > $driverdir/Config/InstallManifest.json.tmp && mv $driverdir/Config/InstallManifest.json.tmp $driverdir/Config/InstallManifest.json
+          grep ExcludeID $c_inf |sed -E 's/ExcludeID/;ExcludeID/g' > $c_inf.tmp && mv $c_inf.tmp $c_inf
+          grep ExcludeID $u_inf |sed -E 's/ExcludeID/;ExcludeID/g' > $u_inf.tmp && mv $u_inf.tmp $u_inf
+          sed -i -E "s/\[ati2mtag_SoftwareDeviceSettings\]/[ati2mtag_SoftwareDeviceSettings\]\nHKR,,DisableWorkstation,%REG_DWORD%,$radeon_edition/" $c_inf
+          sed -i -E "s/\[ati2mtag_SoftwareDeviceSettings\]/[ati2mtag_SoftwareDeviceSettings\]\nHKR,,DisableWorkstation,%REG_DWORD%,$radeon_edition/" $u_inf
+
+        : Create Package
+          cd $driverdir/
+          set -gx ZSTD_CLEVEL 15 && tar -acvf RadeonSoftwareForBootcamp-$edition.tar.zst Bin64/ Config/ Packages/ Setup.exe
+    - name: Create a Release
+      id: create_release
+      uses: actions/create-release@main
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body: ${{ github.ref }} release.
+        draft: false
+        prerelease: false
+    - name: Upload Release Asset Regular
+      uses: actions/upload-release-asset@main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./RadeonSoftwareForBootcamp-${{ matrix.edition }}.tar.zst
+        asset_name: RadeonSoftwareForBootcamp-${{ matrix.edition }}.tar.zst
+        asset_content_type: application/zstd
