@@ -37,9 +37,9 @@ jobs:
         : Detect Edition
 
           if test $edition = Red ; then
-            set -gx radeon_edition 1
+            export radeon_edition=1
           elif test $edition = Blue ; then
-            set -gx radeon_edition 1
+            export radeon_edition=1
           else
             echo Exception 1>&2
             exit 1
