@@ -38,7 +38,7 @@ jobs:
 
           if test $edition = Red ; then
             set -gx radeon_edition 1
-          elif test $edition = Blue
+          elif test $edition = Blue ; then
             set -gx radeon_edition 1
           else
             echo Exception 1>&2
@@ -51,7 +51,7 @@ jobs:
           url=(cat DriverPATH.url)
           mkdir -p Driver/ Driver/Extracted Driver/Downloaded
           aria2c -x16 -s30 -d Driver/Downloaded $url
-         driverpkg=(ls Driver/Downloaded)
+          driverpkg=(ls Driver/Downloaded)
 
         : Extract Driver
 
