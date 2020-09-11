@@ -9,9 +9,29 @@ on:
     branches: [ master ]
 
 jobs:
-  Build:
+  Tag:
     container: archlinux
     runs-on: ubuntu-20.04
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: CheckOut
+        uses: actions/checkout@main
+        with:
+          fetch-depth: '0'
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+  Build:
+    needs: [Tag]
+    container: archlinux
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        shell: bash
     strategy:
       matrix:
         edition: [Red,Blue]
