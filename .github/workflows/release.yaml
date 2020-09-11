@@ -1,4 +1,4 @@
-name: Artifact
+name: Release
 on:
   push:
     branches:
@@ -9,9 +9,25 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  Tag:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: CheckOut
+        uses: actions/checkout@main
+        with:
+          fetch-depth: '0'
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+  Build:
+    needs: [Tag]
     container: archlinux
     runs-on: ubuntu-20.04
+    defaults:
+      run:
+        shell: bash
     strategy:
       matrix:
         edition: [Red,Blue]
@@ -25,53 +41,39 @@ jobs:
       uses: actions/checkout@main
       with:
         fetch-depth: '0'
-    - name: Bump version and push tag
-      uses: anothrNick/github-tag-action@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        WITH_V: true
     - name: Build
       env:
         edition: ${{ matrix.edition }}
-      shell: fish
       run: |
         : Detect Edition
-
-          if test $edition = Red
-            set -gx radeon_edition 1
-          else if test $edition = Blue
-            set -gx radeon_edition 1
-          else
-            echo Exception 1>&2
-            exit 1
-          end
-
+        if test $edition = Red ; then
+          export radeon_edition=1
+        elif test $edition = Blue ; then
+          export radeon_edition=1
+        else
+          echo Exception 1>&2
+          exit 1
+        fi
         : Download Driver
-
-          set -gx PROJROOT $PWD
-          set -x url (cat DriverPATH.url)
-          mkdir -p Driver/ Driver/Extracted Driver/Downloaded
-          aria2c -x16 -s30 -d Driver/Downloaded $url
-          set -x driverpkg (ls Driver/Downloaded)
-
+        export PROJROOT=$PWD
+        url=$(cat DriverPATH.url)
+        mkdir -p Driver/ Driver/Extracted Driver/Downloaded
+        aria2c -x16 -s30 -d Driver/Downloaded $url
+        driverpkg=$(ls Driver/Downloaded)
         : Extract Driver
-
-          set -x driverdir Driver/Extracted
-          7z x -o$driverdir Driver/Downloaded/$driverpkg
-
+        driverdir=Driver/Extracted
+        7z x -o$driverdir Driver/Downloaded/$driverpkg
         : Modify Downloaded Driver
-
-          set c_inf (ls $driverdir/Packages/Drivers/Display/WT6A_INF/C*.inf)
-          set u_inf (ls $driverdir/Packages/Drivers/Display/WT6A_INF/U*.inf)
-          jq '.BuildInfo |= .+ {EnableFalcon : "true"}' < $driverdir/Config/InstallManifest.json > $driverdir/Config/InstallManifest.json.tmp && mv $driverdir/Config/InstallManifest.json.tmp $driverdir/Config/InstallManifest.json
-          grep ExcludeID $c_inf |sed -E 's/ExcludeID/;ExcludeID/g' > $c_inf.tmp && mv $c_inf.tmp $c_inf
-          grep ExcludeID $u_inf |sed -E 's/ExcludeID/;ExcludeID/g' > $u_inf.tmp && mv $u_inf.tmp $u_inf
-          sed -i -E "s/\[ati2mtag_SoftwareDeviceSettings\]/[ati2mtag_SoftwareDeviceSettings\]\nHKR,,DisableWorkstation,%REG_DWORD%,$radeon_edition/" $c_inf
-          sed -i -E "s/\[ati2mtag_SoftwareDeviceSettings\]/[ati2mtag_SoftwareDeviceSettings\]\nHKR,,DisableWorkstation,%REG_DWORD%,$radeon_edition/" $u_inf
-
+        c_inf=$(ls $driverdir/Packages/Drivers/Display/WT6A_INF/C*.inf)
+        u_inf=$(ls $driverdir/Packages/Drivers/Display/WT6A_INF/U*.inf)
+        jq '.BuildInfo |= .+ {EnableFalcon : "true"}' < $driverdir/Config/InstallManifest.json > $driverdir/Config/InstallManifest.json.tmp && mv $driverdir/Config/InstallManifest.json.tmp $driverdir/Config/InstallManifest.json
+        grep ExcludeID $c_inf |sed -E 's/ExcludeID/;ExcludeID/g' > $c_inf.tmp && mv $c_inf.tmp $c_inf
+        grep ExcludeID $u_inf |sed -E 's/ExcludeID/;ExcludeID/g' > $u_inf.tmp && mv $u_inf.tmp $u_inf
+        sed -i -E "s/\[ati2mtag_SoftwareDeviceSettings\]/[ati2mtag_SoftwareDeviceSettings\]\nHKR,,DisableWorkstation,%REG_DWORD%,$radeon_edition/" $c_inf
+        sed -i -E "s/\[ati2mtag_SoftwareDeviceSettings\]/[ati2mtag_SoftwareDeviceSettings\]\nHKR,,DisableWorkstation,%REG_DWORD%,$radeon_edition/" $u_inf
         : Create Package
-          cd $driverdir/
-          set -gx ZSTD_CLEVEL 15 && tar -acvf RadeonSoftwareForBootcamp-$edition.tar.zst Bin64/ Config/ Packages/ Setup.exe
+        cd $driverdir/
+        export ZSTD_CLEVEL=15 && tar -acvf ../../RadeonSoftwareForBootcamp-$edition.tar.zst Bin64/ Config/ Packages/ Setup.exe
     - name: Create a Release
       id: create_release
       uses: actions/create-release@main
