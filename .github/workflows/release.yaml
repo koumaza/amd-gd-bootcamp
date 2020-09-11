@@ -36,7 +36,7 @@ jobs:
       run: |
         : Detect Edition
 
-          if test $edition = Red
+          if test $edition = Red ; then
             set -gx radeon_edition 1
           elif test $edition = Blue
             set -gx radeon_edition 1
