@@ -86,7 +86,7 @@ jobs:
         name: Builded
         path: RadeonSoftwareForBootcamp-${{ matrix.edition }}.tar.zst
         
-  release:
+  Release:
     needs: [Build]
     runs-on: ubuntu-20.04
     steps:
