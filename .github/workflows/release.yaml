@@ -56,16 +56,16 @@ jobs:
         fi
         : Download Driver
         export PROJROOT=$PWD
-        url=(cat DriverPATH.url)
+        url=$(cat DriverPATH.url)
         mkdir -p Driver/ Driver/Extracted Driver/Downloaded
         aria2c -x16 -s30 -d Driver/Downloaded $url
-        driverpkg=(ls Driver/Downloaded)
+        driverpkg=$(ls Driver/Downloaded)
         : Extract Driver
         driverdir=Driver/Extracted
         7z x -o$driverdir Driver/Downloaded/$driverpkg
         : Modify Downloaded Driver
-        c_inf=(ls $driverdir/Packages/Drivers/Display/WT6A_INF/C*.inf)
-        u_inf=(ls $driverdir/Packages/Drivers/Display/WT6A_INF/U*.inf)
+        c_inf=$(ls $driverdir/Packages/Drivers/Display/WT6A_INF/C*.inf)
+        u_inf=$(ls $driverdir/Packages/Drivers/Display/WT6A_INF/U*.inf)
         jq '.BuildInfo |= .+ {EnableFalcon : "true"}' < $driverdir/Config/InstallManifest.json > $driverdir/Config/InstallManifest.json.tmp && mv $driverdir/Config/InstallManifest.json.tmp $driverdir/Config/InstallManifest.json
         grep ExcludeID $c_inf |sed -E 's/ExcludeID/;ExcludeID/g' > $c_inf.tmp && mv $c_inf.tmp $c_inf
         grep ExcludeID $u_inf |sed -E 's/ExcludeID/;ExcludeID/g' > $u_inf.tmp && mv $u_inf.tmp $u_inf
