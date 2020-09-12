@@ -46,8 +46,9 @@ jobs:
     - name: Build
       env:
         edition: ${{ matrix.edition }}
+        tag: ${{ steps.BumpTag.outputs.new_tag }}
       run: |
-        echo ${{ steps.BumpTag.outputs.new_tag }}
+        echo Tag: $tag
         : Detect Edition
         if test $edition = Red ; then
           export radeon_edition=1
