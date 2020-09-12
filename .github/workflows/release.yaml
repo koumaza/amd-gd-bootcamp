@@ -20,7 +20,7 @@ jobs:
         id: BumpTag
         uses: mathieudutour/github-tag-action@v4.5
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
 
   Build:
