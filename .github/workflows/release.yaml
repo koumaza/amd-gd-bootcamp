@@ -94,6 +94,8 @@ jobs:
         path: RadeonSoftwareForBootcamp-${{ matrix.edition }}.tar.zst
         
   Release:
+    env:
+      generated_tag: ${{ needs.Tag.outputs.generated_tag }}
     needs: [Build]
     runs-on: ubuntu-20.04
     steps:
@@ -111,9 +113,9 @@ jobs:
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: refs/tags/${{ needs.Tag.outputs.generated_tag }}
-        release_name: Release refs/tags/${{ needs.Tag.outputs.generated_tag }} 
-        body: ${{ needs.Tag.outputs.generated_tag }} release.
+        tag_name: refs/tags/${{ env.generated_tag }}
+        release_name: Release refs/tags/${{ env.generated_tag }}
+        body: ${{ env.generated_tag }} release.
         draft: false
         prerelease: false
     - name: Upload Release Asset Red
