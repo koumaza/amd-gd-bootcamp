@@ -72,7 +72,7 @@ jobs:
         
         : Extract Driver        
         driverdir=Driver/Extracted
-        7z x -o$driverdir Driver/Downloaded/$driverpkg
+        7z x -o$driverdir Driver/Downloaded/$driverpkg 1>/dev/null
         
         : Modify Downloaded Driver        
         c_inf=$(ls $driverdir/Packages/Drivers/Display/WT6A_INF/C*.inf)
@@ -111,8 +111,8 @@ jobs:
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ needs.Tag.outputs.generated_tag }} 
-        release_name: Release ${{ needs.Tag.outputs.generated_tag }} 
+        tag_name: refs/tags/${{ needs.Tag.outputs.generated_tag }} 
+        release_name: Release refs/tags/${{ needs.Tag.outputs.generated_tag }} 
         body: ${{ needs.Tag.outputs.generated_tag }} release.
         draft: false
         prerelease: false
