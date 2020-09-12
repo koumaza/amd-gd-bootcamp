@@ -48,11 +48,7 @@ jobs:
     - name: Build
       env:
         edition: ${{ matrix.edition }}
-        tag: ${{ needs.Tag.outputs.generated_tag }}
-        github_ref: ${{ github.ref }}
       run: |
-        echo Tag: $tag
-        echo GR: $github_ref  
         : Detect Edition
         if test $edition = Red ; then
           export radeon_edition=1
