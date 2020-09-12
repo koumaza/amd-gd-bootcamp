@@ -10,6 +10,8 @@ on:
 
 jobs:
   Tag:
+    outputs:
+      generated_tag: ${{ steps.BumpTag.outputs.new_tag }}
     runs-on: ubuntu-20.04
     steps:
       - name: CheckOut
@@ -46,7 +48,7 @@ jobs:
     - name: Build
       env:
         edition: ${{ matrix.edition }}
-        tag: ${{ steps.BumpTag.outputs.new_tag }}
+        tag: ${{ needs.Tag.outputs.generated_tag }}
       run: |
         echo Tag: $tag
         : Detect Edition
@@ -107,9 +109,9 @@ jobs:
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ steps.BumpTag.outputs.new_tag }}
-        release_name: Release ${{ steps.BumpTag.outputs.new_tag }}
-        body: ${{ steps.BumpTag.outputs.new_tag }} release.
+        tag_name: ${{ needs.Tag.outputs.generated_tag }} 
+        release_name: Release ${{ needs.Tag.outputs.generated_tag }} 
+        body: ${{ needs.Tag.outputs.generated_tag }} release.
         draft: false
         prerelease: false
     - name: Upload Release Asset Red
