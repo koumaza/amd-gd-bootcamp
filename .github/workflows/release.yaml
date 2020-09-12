@@ -84,7 +84,7 @@ jobs:
         cp CreateCat.cmd $driverdir/
         cp DriverPATH.url $driverdir/Driver_Source.url
         cd $driverdir/
-        export ZSTD_CLEVEL=15 && tar -acvf ../../RadeonSoftwareForBootcamp-$edition.tar.zst Bin64/ Config/ Packages/ Setup.exe
+        export ZSTD_CLEVEL=15 && tar -acvf ../../RadeonSoftwareForBootcamp-$edition.tar.zst Bin64/ Config/ Packages/ Setup.exe CreateCat.cmd Driver_Source.url
 
     - name: Upload a Build Artifact (${{ matrix.edition }})
       uses: actions/upload-artifact@main
