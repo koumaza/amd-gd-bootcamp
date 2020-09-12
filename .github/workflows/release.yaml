@@ -110,9 +110,8 @@ jobs:
       uses: actions/create-release@main
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          generated_tag: ${{ needs.Tag.outputs.generated_tag }}
       with:
-        tag_name: refs/tags/$generated_tag
+        tag_name: refs/tags/${{ needs.Tag.outputs.generated_tag }}
         release_name: Release refs/tags/$generated_tag 
         body: $generated_tag release.
         draft: false
