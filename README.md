@@ -1,6 +1,9 @@
 # amd-gd-bootcamp
 AMD GPU-Driver For Bootcamper
 
+# How To Install
+Full Guide: [wiki/Install](https://github.com/koumaza/amd-gd-bootcamp/wiki/Install)
+
 ## Requirements
 ### WDK
 WDK here https://www.microsoft.com/en-us/software-download/windowsinsiderpreviewWDK
