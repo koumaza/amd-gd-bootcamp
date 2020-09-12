@@ -63,12 +63,12 @@ jobs:
         export PROJROOT=$PWD
         url=$(cat DriverPATH.url)
         mkdir -p Driver/ Driver/Extracted Driver/Downloaded
-        aria2c -x16 -s30 -m0 -ctrue -d Driver/Downloaded $url
+        aria2c -x16 -s30 -m0 -ctrue --show-console-readout false --summary-interval 0 -d Driver/Downloaded $url
         driverpkg=$(ls Driver/Downloaded)
         
         : Extract Driver        
         driverdir=Driver/Extracted
-        7z x -o$driverdir Driver/Downloaded/$driverpkg 1>/dev/null
+        7z x -o$driverdir Driver/Downloaded/$driverpkg >/dev/null || exit $? || echo Failed: $?
         
         : Modify Downloaded Driver        
         c_inf=$(ls $driverdir/Packages/Drivers/Display/WT6A_INF/C*.inf)
