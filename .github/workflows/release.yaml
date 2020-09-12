@@ -92,7 +92,7 @@ jobs:
   Release:
     env:
       generated_tag: ${{ needs.Tag.outputs.generated_tag }}
-    needs: [Build]
+    needs: [Tag,Build]
     runs-on: ubuntu-20.04
     steps:
     - name: CheckOut
