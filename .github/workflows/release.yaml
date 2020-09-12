@@ -47,6 +47,7 @@ jobs:
       env:
         edition: ${{ matrix.edition }}
       run: |
+        echo ${{ steps.BumpTag.outputs.new_tag }}
         : Detect Edition
         if test $edition = Red ; then
           export radeon_edition=1
