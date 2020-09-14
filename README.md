@@ -3,7 +3,9 @@ AMD GPU-Driver For Bootcamper
 
 # Versions
 #### [Adrenalin 2020 Edition 20.8.3 Optional](https://github.com/koumaza/amd-gd-bootcamp/releases/tag/v1.9.0)
->***Performance is significantly poor.***
+>***Performance is significantly poor.*** `don't recommend very much`
+#### [Adrenalin 2020 Edition 20.8.2 Optional](https://github.com/koumaza/amd-gd-bootcamp/releases/tag/v1.11.0)
+>***Relatively stable*** `recommend`
 
 
 # How To Install
