@@ -2,6 +2,10 @@
 AMD GPU-Driver For Bootcamper
 
 # Versions
+### ![amd-latest-shield](https://img.shields.io/badge/%E2%80%8B-%E2%80%8B%20latest%20-brightgreen?style=flat-square&logo=amd)
+#### [Adrenalin 2020 Edition 20.9.2 Optional](https://github.com/koumaza/amd-gd-bootcamp/releases/tag/v1.16.0)  [___`Release Note`___](https://www.amd.com/en/support/kb/release-notes/rn-rad-win-20-9-2)
+>***Stable*** `recommend`
+### ![amd-latest-shield-oldest](https://img.shields.io/badge/%E2%80%8B-%E2%80%8B%20oldest%20-brightgreen?style=flat-square&logo=amd)
 #### [Adrenalin 2020 Edition 20.9.1 Optional](https://github.com/koumaza/amd-gd-bootcamp/releases/tag/v1.13.0)  [___`Release Note`___](https://www.amd.com/en/support/kb/release-notes/rn-rad-win-20-9-1)
 >***Stable*** `recommend`
 #### [Adrenalin 2020 Edition 20.8.3 Optional](https://github.com/koumaza/amd-gd-bootcamp/releases/tag/v1.9.0)
