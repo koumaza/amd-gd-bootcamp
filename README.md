@@ -13,7 +13,10 @@ AMD GPU-Driver For Bootcamper
 #### [Adrenalin 2020 Edition 20.8.2 Optional](https://github.com/koumaza/amd-gd-bootcamp/releases/tag/v1.11.0)
 >***Relatively stable*** `recommend`
 
-
+# Known Issue
+## Brightness Control
+How to Fix it:
+https://github.com/koumaza/amd-gd-bootcamp/issues/1#issuecomment-708913638
 # How To Install
 Full Guide: [wiki/Install](https://github.com/koumaza/amd-gd-bootcamp/wiki/Install)
 
