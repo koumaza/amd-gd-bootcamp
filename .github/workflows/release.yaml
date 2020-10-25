@@ -36,6 +36,11 @@ jobs:
       matrix:
         edition: [Red,Blue]
     steps:
+    - name: Restore pacman cache
+      uses: actions/cache@main
+      with:
+        path: /var/cache/pacman/
+        key: ${{ runner.os }}-build-pacman
     - name: SetUp Environment
       run: |
         pacman -Syyuuv --noconfirm --needed --debug --color always \
