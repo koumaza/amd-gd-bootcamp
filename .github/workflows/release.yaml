@@ -10,6 +10,7 @@ on:
 
 jobs:
   Tag:
+    if: "contains(toJSON(github.event.commits.*.msg), '!')"
     outputs:
       generated_tag: ${{ steps.BumpTag.outputs.new_tag }}
     runs-on: ubuntu-20.04
