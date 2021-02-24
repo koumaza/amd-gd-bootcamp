@@ -2,9 +2,12 @@
 AMD GPU-Driver For Bootcamper
 # Versions
 ### <img height=30 width=100 src="https://img.shields.io/badge/%E2%80%8B-%E2%80%8B%20latest%20%E2%80%8B%20-brightgreen?style=flat-square&logo=amd">
-#### [Adrenalin 2020 Edition 21.1.1 Optional](https://github.com/koumaza/amd-gd-bootcamp/releases/tag/v1.24.0)  [___`Release Note`___](https://www.amd.com/en/support/kb/release-notes/rn-rad-win-21-1-1)
+#### [Adrenalin 2020 Edition 21.2.3 Optional](https://github.com/koumaza/amd-gd-bootcamp/releases/tag/v1.25.0)  [___`Release Note`___](https://www.amd.com/en/support/kb/release-notes/rn-rad-win-21-2-3)
+>***Stable*** `recommend`
 
 ### <img height=30 width=100 src="https://img.shields.io/badge/%E2%80%8B-%E2%80%8B%20oldest%20%E2%80%8B%20-brightgreen?style=flat-square&logo=amd">
+#### [Adrenalin 2020 Edition 21.1.1 Optional](https://github.com/koumaza/amd-gd-bootcamp/releases/tag/v1.24.0)  [___`Release Note`___](https://www.amd.com/en/support/kb/release-notes/rn-rad-win-21-1-1)
+>***Stable*** `recommend`
 #### [Adrenalin 2020 Edition 20.12.1 Optional](https://github.com/koumaza/amd-gd-bootcamp/releases/tag/v1.22.0)  [___`Release Note`___](https://www.amd.com/en/support/kb/release-notes/rn-rad-win-20-12-1)
 >***Stable*** `recommend`
 #### [Adrenalin 2020 Edition 20.10.1 Optional](https://github.com/koumaza/amd-gd-bootcamp/releases/tag/v1.19.0)  [___`Release Note`___](https://www.amd.com/en/support/kb/release-notes/rn-rad-win-20-10-1)
