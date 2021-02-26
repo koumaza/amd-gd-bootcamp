@@ -28,7 +28,7 @@ jobs:
 
   Build:
     needs: [Tag]
-    container: archlinux
+    container: archlinux:base-devel
     runs-on: ubuntu-20.04
     defaults:
       run:
