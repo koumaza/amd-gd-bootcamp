@@ -1,5 +1,5 @@
 # amd-gd-bootcamp
-AMD GPU-Driver For Bootcamper
+AMD GPU-Driver For Bootcamp
 # Versions
 ### <img height=30 width=100 src="https://img.shields.io/badge/%E2%80%8B-%E2%80%8B%20latest%20%E2%80%8B%20-brightgreen?style=flat-square&logo=amd">
 #### [Adrenalin 2020 Edition 21.2.3 Optional](https://github.com/koumaza/amd-gd-bootcamp/releases/tag/v1.25.0)  [___`Release Note`___](https://www.amd.com/en/support/kb/release-notes/rn-rad-win-21-2-3)
