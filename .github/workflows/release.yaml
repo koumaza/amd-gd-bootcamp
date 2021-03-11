@@ -95,7 +95,7 @@ jobs:
     - name: Upload a Build Artifact (${{ matrix.edition }})
       uses: actions/upload-artifact@main
       with:
-        name: Builded
+        name: Built
         path: RadeonSoftwareForBootcamp-${{ matrix.edition }}.tar.zst
         
   Release:
