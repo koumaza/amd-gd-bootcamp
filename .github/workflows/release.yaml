@@ -111,7 +111,7 @@ jobs:
     - name: Download a Build Artifact
       uses: actions/download-artifact@main
       with:
-        name: Builded
+        name: Built
     - name: Create a Release
       id: create_release
       uses: actions/create-release@main
