@@ -77,7 +77,7 @@ jobs:
         7z x -o$driverdir Driver/Downloaded/$driverpkg >/dev/null || exit $? || echo Failed: $?
         
         : Modify Downloaded Driver        
-        inflist=$(ls $driverdir/Packages/Drivers/Display/WT6A_INF/C*.inf $driverdir/Packages/Drivers/Display/WT6A_INF/U*.inf)
+        inflist=$(ls $driverdir/Packages/Drivers/Display/WT6A_INF/C*.inf||:)$(ls $driverdir/Packages/Drivers/Display/WT6A_INF/U*.inf||:)
         rm $driverdir/Packages/Drivers/Display/WT6A_INF/*.cat
         jq '.BuildInfo |= .+ {EnableFalcon : "true"}' < $driverdir/Config/InstallManifest.json > $driverdir/Config/InstallManifest.json.tmp && mv $driverdir/Config/InstallManifest.json.tmp $driverdir/Config/InstallManifest.json
         for inf in ${inflist}
